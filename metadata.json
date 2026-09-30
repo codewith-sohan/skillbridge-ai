@@ -1,0 +1,6 @@
+{
+  "name": "SkillBridge AI",
+  "description": "Smart India Hackathon 2026 - Real-Time Skill-to-Job Alignment & Employment Outcome Tracking Platform for Government, Institutes, Employers, and Students.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
