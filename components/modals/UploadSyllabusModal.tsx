@@ -392,6 +392,7 @@ export const UploadSyllabusModal: React.FC<UploadSyllabusModalProps> = ({
                   {imagePreview ? (
                     <div className="space-y-3">
                       <div className="relative inline-block max-h-56 rounded overflow-hidden border border-slate-700 shadow-sm bg-white">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={imagePreview}
                           alt="Syllabus Preview"

@@ -29,6 +29,9 @@ import {
   Loader2,
   Send,
   HelpCircle,
+  Calculator,
+  ShieldAlert,
+  Info,
 } from 'lucide-react';
 
 interface GovernmentDashboardProps {
@@ -37,6 +40,7 @@ interface GovernmentDashboardProps {
   skills: Skill[];
   onOpenHighThinking: () => void;
   onOpenSyllabusUpload: () => void;
+  onOpenMethodology?: () => void;
 }
 
 export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
@@ -45,6 +49,7 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
   skills,
   onOpenHighThinking,
   onOpenSyllabusUpload,
+  onOpenMethodology,
 }) => {
   const [selectedDistrict, setSelectedDistrict] = useState<string>('All');
   const [selectedSector, setSelectedSector] = useState<string>('All');
@@ -101,8 +106,9 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
     if (type === 'programs' || type === 'all') {
       csvContent += '# MAHARASHTRA VOCATIONAL CURRICULUM ALIGNMENT AUDIT (CHALLENGE 134)\r\n';
       csvContent += '# Directorate of Vocational Education & Training (DVET) • Smart India Hackathon 2026\r\n';
+      csvContent += '# NOTICE: SYNTHETIC BENCHMARK PILOT DATASET FOR EVALUATOR DEMO\r\n';
       csvContent += `# Timestamp: ${new Date().toISOString()} • Filter District: ${selectedDistrict} • Sector: ${selectedSector}\r\n`;
-      csvContent += 'Program ID,Program Name,Institution Name,District,Sector,Duration (Weeks),Enrolled Trainees,Alignment Score (%),Placement Rate (%),Median Package (INR),Status,Audit Date\r\n';
+      csvContent += 'Program ID,Program Name,Institution Name,District,Sector,Duration (Weeks),Enrolled Trainees (Sample),Alignment Score (%),Placement Rate (%),Median Package (INR),Status,Audit Date\r\n';
 
       filteredPrograms.forEach((p) => {
         const row = [
@@ -126,6 +132,7 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
 
     if (type === 'placements' || type === 'all') {
       csvContent += '# LONGITUDINAL GRADUATE EMPLOYMENT & SKILL UTILIZATION TRACING (CHALLENGE 135)\r\n';
+      csvContent += '# NOTICE: SYNTHETIC COHORT PLACEMENT DATASET FOR EVALUATOR DEMO\r\n';
       csvContent += 'Record ID,Candidate Name,Institution,District,Employer Organization,Designation,Annual CTC (INR),Sector,Skill Utilization Rate (%),Retention (Months),Placement Date\r\n';
 
       placements.forEach((pl) => {
@@ -196,33 +203,34 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
   };
 
   return (
-    <div className="space-y-6 text-slate-100">
+    <div className="space-y-5 text-slate-100 font-sans">
       {/* Official Executive Header */}
       <div className="bg-[#0C1222] border border-slate-800 rounded-xl p-5 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1.5 max-w-3xl">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-semibold text-blue-400 bg-blue-950/60 border border-blue-800/60 px-2 py-0.5 rounded">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-mono font-semibold text-blue-400 bg-blue-950/60 border border-blue-800/60 px-2 py-0.5 rounded">
                 STATE POLICY OVERSIGHT
               </span>
-              <span className="text-[11px] text-slate-400 font-mono">
-                Gazette Ref: DVET/MH-2026/CURR-ALIGN-01
+              <span className="text-[10px] font-mono text-amber-300 bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded flex items-center gap-1">
+                <ShieldAlert className="w-3 h-3 text-amber-400" />
+                SYNTHETIC PILOT BENCHMARK (SIH 2026 Evaluator Demo)
               </span>
             </div>
             <h1 className="text-xl font-bold text-white tracking-tight">
               State Directorate of Vocational Education & Training (DVET)
             </h1>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Real-time surveillance of curriculum relevancy (Challenge 134) and longitudinal graduate career retention (Challenge 135) across 412 state ITIs and polytechnic institutes.
+              Curriculum competency verification (Challenge 134) & longitudinal employment tracing (Challenge 135) modeled across Maharashtra ITIs and polytechnic institutes.
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          <div className="flex items-center gap-2 shrink-0 flex-wrap">
             {/* Download CSV Dropdown Button */}
             <div className="relative">
               <button
                 onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
-                className="bg-emerald-700 hover:bg-emerald-600 text-white font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-2 transition-all shadow-sm active:scale-95"
+                className="bg-emerald-700 hover:bg-emerald-600 text-white font-medium px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download CSV</span>
@@ -232,7 +240,7 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
               {isExportMenuOpen && (
                 <div className="absolute right-0 mt-2 w-64 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-30 py-1.5 text-xs font-sans">
                   <div className="px-3 py-1.5 text-[10px] font-mono text-slate-400 uppercase border-b border-slate-800">
-                    Export State Datasets (CSV)
+                    Export Synthetic Datasets (CSV)
                   </div>
                   <button
                     onClick={() => downloadCSV('all')}
@@ -259,96 +267,121 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
               )}
             </div>
 
+            {onOpenMethodology && (
+              <button
+                onClick={onOpenMethodology}
+                className="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-medium px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all"
+                title="View mathematical scoring formulas behind 92% alignment and 94% retention"
+              >
+                <Calculator className="w-3.5 h-3.5 text-blue-400" />
+                <span>Methodology & Formulas</span>
+              </button>
+            )}
+
             <button
               onClick={onOpenHighThinking}
-              className="bg-blue-700 hover:bg-blue-600 text-white font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-2 transition-all shadow-sm"
+              className="bg-blue-700 hover:bg-blue-600 text-white font-medium px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-blue-200" />
-              Policy Reasoning Engine
+              <span>Policy Engine</span>
             </button>
             <button
               onClick={onOpenSyllabusUpload}
-              className="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-2 transition-all"
+              className="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-medium px-3 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all"
             >
               <FileText className="w-3.5 h-3.5 text-teal-400" />
-              Accreditation Syllabus Audit
+              <span>Audit Syllabus</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* KPI Metrics Strip */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
-        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-4 space-y-1">
-          <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
+      {/* KPI Metrics Strip (Labeled clearly as Synthetic Pilot Baseline) */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-3.5 space-y-1 relative group">
+          <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Competency Index</span>
             <Award className="w-3.5 h-3.5 text-blue-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white tabular-nums">
-            {avgAlignment}<span className="text-sm font-normal text-slate-400">%</span>
+          <div className="text-2xl font-bold font-mono text-white tabular-nums flex items-baseline gap-1.5">
+            <span>{avgAlignment}%</span>
+            {onOpenMethodology && (
+              <button
+                onClick={onOpenMethodology}
+                className="text-[10px] text-blue-400 hover:underline font-sans font-normal"
+              >
+                (Methodology)
+              </button>
+            )}
           </div>
-          <div className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
-            <ArrowUpRight className="w-3 h-3" />
-            +4.2% YoY Refresh
+          <div className="text-[10px] text-slate-400 flex items-center gap-1 font-mono">
+            <span>Simulated Pilot Avg</span>
           </div>
         </div>
 
-        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-4 space-y-1">
-          <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
+        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Graduate Placement</span>
             <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
           </div>
           <div className="text-2xl font-bold font-mono text-white tabular-nums">
             {avgPlacement}<span className="text-sm font-normal text-slate-400">%</span>
           </div>
-          <div className="text-[10px] text-slate-400">
-            Target: 85.0%
+          <div className="text-[10px] text-slate-400 font-mono">
+            Target: 85.0% • Pilot Baseline
           </div>
         </div>
 
-        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-4 space-y-1">
-          <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
+        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Skill Utilization</span>
             <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-white tabular-nums">
-            {avgSkillUtilization}<span className="text-sm font-normal text-slate-400">%</span>
+          <div className="text-2xl font-bold font-mono text-white tabular-nums flex items-baseline gap-1.5">
+            <span>{avgSkillUtilization}%</span>
+            {onOpenMethodology && (
+              <button
+                onClick={onOpenMethodology}
+                className="text-[10px] text-teal-400 hover:underline font-sans font-normal"
+              >
+                (Formula)
+              </button>
+            )}
           </div>
-          <div className="text-[10px] text-teal-400">
-            On-job syllabus match
+          <div className="text-[10px] text-teal-400 font-mono">
+            Day-90 on-job match
           </div>
         </div>
 
-        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-4 space-y-1">
-          <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
+        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-3.5 space-y-1">
+          <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Median Package</span>
             <DollarSign className="w-3.5 h-3.5 text-amber-400" />
           </div>
           <div className="text-2xl font-bold font-mono text-white tabular-nums">
             ₹6.4 <span className="text-xs font-normal text-slate-400">LPA</span>
           </div>
-          <div className="text-[10px] text-slate-400">
-            Entry-level vocational tier
+          <div className="text-[10px] text-slate-400 font-mono">
+            Simulated Tier (INR)
           </div>
         </div>
 
-        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-4 space-y-1 col-span-2 lg:col-span-1">
-          <div className="text-[11px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
+        <div className="bg-[#0E1528] border border-slate-800 rounded-xl p-3.5 space-y-1 col-span-2 lg:col-span-1">
+          <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Monitored Trainees</span>
             <Users className="w-3.5 h-3.5 text-indigo-400" />
           </div>
           <div className="text-2xl font-bold font-mono text-white tabular-nums">
             {totalEnrolled.toLocaleString()}
           </div>
-          <div className="text-[10px] text-slate-400">
-            Across {filteredPrograms.length} active programs
+          <div className="text-[10px] text-slate-400 font-mono">
+            Synthetic Pilot Cohort
           </div>
         </div>
       </div>
 
-      {/* De-cluttered Navigation & Filter Controls */}
+      {/* Segmented Controls & Dropdown Filters */}
       <div className="bg-[#0C1222] border border-slate-800 rounded-xl p-2.5 flex items-center justify-between flex-wrap gap-3">
-        {/* Segmented View Switcher (Reduces clutter dramatically) */}
         <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
           <button
             onClick={() => setActiveSubTab('overview')}
@@ -452,7 +485,7 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
               <button
                 type="button"
                 onClick={() =>
-                  handleAskCopilot('How do we bridge the 15% curriculum deficit in Nashik CNC machinist programs to match Bharat Forge and Bosch requisitions?')
+                  handleAskCopilot('How do we bridge the 15% curriculum deficit in Nashik CNC machinist programs to match industrial requisitions?')
                 }
                 className="text-[11px] bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 px-2.5 py-1 rounded transition-colors text-left"
               >
@@ -521,10 +554,10 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
         </div>
       )}
 
-      {/* Overview & Dual Grids */}
+      {/* Challenge 134: Curriculum Relevancy List */}
       {(activeSubTab === 'overview' || activeSubTab === 'challenge134') && (
         <div className="bg-[#0C1222] border border-slate-800 rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/60 border border-amber-800/60 px-1.5 py-0.5 rounded">
@@ -539,9 +572,14 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
               </p>
             </div>
 
-            <span className="text-[11px] font-mono font-medium text-rose-300 bg-rose-950/60 border border-rose-800/60 px-2 py-0.5 rounded">
-              {programsNeedingRevision.length} Revision Mandates Issued
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">
+                Simulated Cohort Sample
+              </span>
+              <span className="text-[11px] font-mono font-medium text-rose-300 bg-rose-950/60 border border-rose-800/60 px-2 py-0.5 rounded">
+                {programsNeedingRevision.length} Revisions Mandated
+              </span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -558,17 +596,24 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
                     </p>
                   </div>
 
-                  <span
-                    className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border shrink-0 ${
-                      prog.alignmentScore >= 85
-                        ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
-                        : prog.alignmentScore >= 70
-                        ? 'bg-amber-950/60 text-amber-300 border-amber-800/60'
-                        : 'bg-rose-950/60 text-rose-300 border-rose-800/60'
-                    }`}
-                  >
-                    {prog.alignmentScore}% ALIGNED
-                  </span>
+                  <div className="flex flex-col items-end shrink-0 gap-1">
+                    <span
+                      onClick={onOpenMethodology}
+                      title="Click to view weighted scoring formula: 45% semantic match + 35% NSQF + 20% live vacancy recency"
+                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border cursor-pointer hover:underline transition-all ${
+                        prog.alignmentScore >= 85
+                          ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
+                          : prog.alignmentScore >= 70
+                          ? 'bg-amber-950/60 text-amber-300 border-amber-800/60'
+                          : 'bg-rose-950/60 text-rose-300 border-rose-800/60'
+                      }`}
+                    >
+                      {prog.alignmentScore}% ALIGNED ⓘ
+                    </span>
+                    <span className="text-[9px] font-mono text-slate-500">
+                      Method: 0.45S + 0.35N + 0.20D
+                    </span>
+                  </div>
                 </div>
 
                 <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
@@ -598,7 +643,7 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
       {/* Challenge 135: Longitudinal Employment Tracking */}
       {(activeSubTab === 'overview' || activeSubTab === 'challenge135') && (
         <div className="bg-[#0C1222] border border-slate-800 rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-mono font-bold text-teal-400 bg-teal-950/60 border border-teal-800/60 px-1.5 py-0.5 rounded">
@@ -609,13 +654,21 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
                 </h3>
               </div>
               <p className="text-[11px] text-slate-400 mt-0.5">
-                Continuous tracing of career trajectory at 6, 12, and 24-month follow-up cycles
+                Continuous tracing of career trajectory at 6, 12, and 24-month follow-up cycles (Synthetic Pilot Dataset)
               </p>
             </div>
 
-            <span className="text-[11px] font-mono font-medium text-emerald-300 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
-              Active Tracing Telemetry
-            </span>
+            <div className="flex items-center gap-2">
+              {onOpenMethodology && (
+                <button
+                  onClick={onOpenMethodology}
+                  className="text-[11px] font-mono text-teal-400 hover:text-teal-300 underline underline-offset-2 flex items-center gap-1"
+                >
+                  <Info className="w-3 h-3" />
+                  <span>How 94% Retention is Derived</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Retention Milestones */}
@@ -623,7 +676,7 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
             <div>
               <span className="text-[10px] font-mono text-slate-400 uppercase">6-Month Retention</span>
               <div className="text-lg font-bold font-mono text-emerald-400 mt-0.5">92.4%</div>
-              <span className="text-[10px] text-slate-500">Primary Sector</span>
+              <span className="text-[10px] text-slate-500">Day-180 Supervisor Checklist</span>
             </div>
             <div>
               <span className="text-[10px] font-mono text-slate-400 uppercase">12-Month Retention</span>
@@ -639,17 +692,27 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
 
           {/* Live Placement Telemetry Table */}
           <div className="space-y-2">
-            <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block">
-              Recent Verified Placements (Employer Feedback Confirmed):
-            </span>
+            <div className="flex items-center justify-between text-[11px]">
+              <span className="font-semibold text-slate-300 uppercase tracking-wider">
+                Recent Verified Placements (Simulated Pilot Cohort):
+              </span>
+              <span className="text-slate-500 font-mono text-[10px]">
+                Showing {placements.length} synthetic verification records
+              </span>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
               {placements.map((place) => (
                 <div
                   key={place.id}
-                  className="bg-slate-900/80 border border-slate-800 rounded-lg p-3 flex items-center justify-between text-xs"
+                  className="bg-slate-900/80 border border-slate-800 rounded-lg p-3 flex items-center justify-between text-xs hover:border-slate-700 transition-colors"
                 >
                   <div className="space-y-0.5">
-                    <div className="font-semibold text-white">{place.studentName}</div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-white">{place.studentName}</span>
+                      <span className="text-[9px] font-mono text-slate-500 bg-slate-950 px-1 rounded border border-slate-800">
+                        Synthetic Record
+                      </span>
+                    </div>
                     <div className="text-[11px] text-slate-400">
                       {place.role} • <span className="text-slate-200">{place.companyName}</span>
                     </div>
@@ -662,9 +725,13 @@ export const GovernmentDashboard: React.FC<GovernmentDashboardProps> = ({
                     <div className="font-mono font-bold text-white">
                       ₹{(place.salaryINR / 100000).toFixed(1)} LPA
                     </div>
-                    <span className="text-[10px] font-mono font-semibold text-teal-300 bg-teal-950/60 border border-teal-800/60 px-2 py-0.5 rounded">
-                      {place.skillUtilizationRate}% On-Job Match
-                    </span>
+                    <button
+                      onClick={onOpenMethodology}
+                      title="Click to view longitudinal skill utilization formula"
+                      className="text-[10px] font-mono font-semibold text-teal-300 bg-teal-950/60 border border-teal-800/60 px-2 py-0.5 rounded hover:underline block ml-auto"
+                    >
+                      {place.skillUtilizationRate}% On-Job Match ⓘ
+                    </button>
                   </div>
                 </div>
               ))}

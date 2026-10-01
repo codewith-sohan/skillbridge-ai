@@ -12,6 +12,8 @@ import { UploadSyllabusModal } from '@/components/modals/UploadSyllabusModal';
 import { HighThinkingModal } from '@/components/modals/HighThinkingModal';
 import { PostJobModal } from '@/components/modals/PostJobModal';
 import { AddProgramModal } from '@/components/modals/AddProgramModal';
+import { MethodologyModal } from '@/components/modals/MethodologyModal';
+import { ShieldAlert, ArrowRight, Calculator } from 'lucide-react';
 
 import {
   UserRole,
@@ -62,6 +64,7 @@ export default function Home() {
   const [isHighThinkingModalOpen, setIsHighThinkingModalOpen] = useState(false);
   const [isPostJobModalOpen, setIsPostJobModalOpen] = useState(false);
   const [isAddProgramModalOpen, setIsAddProgramModalOpen] = useState(false);
+  const [isMethodologyModalOpen, setIsMethodologyModalOpen] = useState(false);
 
   // Listen for Auth state changes
   useEffect(() => {
@@ -197,7 +200,31 @@ export default function Home() {
         onSignOut={handleSignOut}
         onOpenHighThinking={() => setIsHighThinkingModalOpen(true)}
         onOpenSyllabusUpload={() => setIsSyllabusModalOpen(true)}
+        onOpenMethodology={() => setIsMethodologyModalOpen(true)}
       />
+
+      {/* Evaluator Benchmark Transparency Notice */}
+      <div className="bg-[#09101D] border-b border-slate-800 py-2 px-4 text-xs">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-slate-300">
+            <span className="bg-amber-950/80 text-amber-300 text-[10px] font-mono px-2 py-0.5 rounded border border-amber-800/80 font-bold shrink-0 flex items-center gap-1">
+              <ShieldAlert className="w-3 h-3 text-amber-400" />
+              SIH 2026 EVALUATION NOTICE
+            </span>
+            <span className="text-[11px] text-slate-300">
+              Institutional cohorts, placement records, and corporate postings are <strong>synthetic pilot benchmark data</strong> modeled for Challenge 134 & 135 evaluation.
+            </span>
+          </div>
+          <button
+            onClick={() => setIsMethodologyModalOpen(true)}
+            className="text-[11px] font-mono font-medium text-blue-400 hover:text-blue-300 underline underline-offset-2 flex items-center gap-1 shrink-0"
+          >
+            <Calculator className="w-3 h-3" />
+            <span>View 92% Alignment & 94% Retention Formulas</span>
+            <ArrowRight className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
@@ -214,6 +241,7 @@ export default function Home() {
                 skills={skills}
                 onOpenHighThinking={() => setIsHighThinkingModalOpen(true)}
                 onOpenSyllabusUpload={() => setIsSyllabusModalOpen(true)}
+                onOpenMethodology={() => setIsMethodologyModalOpen(true)}
               />
             )}
 
@@ -223,6 +251,7 @@ export default function Home() {
                 curriculumAnalyses={curriculumAnalyses}
                 onOpenSyllabusUpload={() => setIsSyllabusModalOpen(true)}
                 onOpenAddProgram={() => setIsAddProgramModalOpen(true)}
+                onOpenMethodology={() => setIsMethodologyModalOpen(true)}
               />
             )}
 
@@ -232,6 +261,7 @@ export default function Home() {
                 students={students}
                 onOpenPostJob={() => setIsPostJobModalOpen(true)}
                 onPlacementRecorded={handlePlacementRecorded}
+                onOpenMethodology={() => setIsMethodologyModalOpen(true)}
               />
             )}
 
@@ -285,6 +315,11 @@ export default function Home() {
         isOpen={isAddProgramModalOpen}
         onClose={() => setIsAddProgramModalOpen(false)}
         onProgramCreated={handleProgramCreated}
+      />
+
+      <MethodologyModal
+        isOpen={isMethodologyModalOpen}
+        onClose={() => setIsMethodologyModalOpen(false)}
       />
     </div>
   );

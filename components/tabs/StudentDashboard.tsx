@@ -46,12 +46,12 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
       <div className="bg-[#0C1222] border border-slate-800 rounded-xl p-5 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-1.5 max-w-3xl">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-mono font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
                 STUDENT & TRAINEE CREDENTIAL REGISTRY
               </span>
-              <span className="text-[11px] text-slate-400 font-mono">
-                Direct Career Matching System
+              <span className="text-[10px] font-mono text-amber-300 bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded">
+                SYNTHETIC PERSONA (Pilot Demo)
               </span>
             </div>
             <h1 className="text-xl font-bold text-white tracking-tight">

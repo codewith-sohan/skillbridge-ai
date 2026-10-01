@@ -18,6 +18,9 @@ import {
   BookOpen,
   Award,
   ShieldCheck,
+  Calculator,
+  ShieldAlert,
+  Info,
 } from 'lucide-react';
 
 interface InstituteDashboardProps {
@@ -26,6 +29,7 @@ interface InstituteDashboardProps {
   onOpenSyllabusUpload: () => void;
   onOpenAddProgram: () => void;
   onSelectProgramForAnalysis?: (program: TrainingProgram) => void;
+  onOpenMethodology?: () => void;
 }
 
 export const InstituteDashboard: React.FC<InstituteDashboardProps> = ({
@@ -34,6 +38,7 @@ export const InstituteDashboard: React.FC<InstituteDashboardProps> = ({
   onOpenSyllabusUpload,
   onOpenAddProgram,
   onSelectProgramForAnalysis,
+  onOpenMethodology,
 }) => {
   const [selectedProgramId, setSelectedProgramId] = useState<string>(programs[0]?.id || '');
   const [programSearchTerm, setProgramSearchTerm] = useState('');
@@ -51,41 +56,52 @@ export const InstituteDashboard: React.FC<InstituteDashboardProps> = ({
     programs[0];
 
   return (
-    <div className="space-y-6 text-slate-100">
+    <div className="space-y-5 text-slate-100 font-sans">
       {/* Official Header Banner */}
       <div className="bg-[#0C1222] border border-slate-800 rounded-xl p-5 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1.5 max-w-3xl">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-semibold text-indigo-400 bg-indigo-950/60 border border-indigo-800/60 px-2 py-0.5 rounded">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-mono font-semibold text-indigo-400 bg-indigo-950/60 border border-indigo-800/60 px-2 py-0.5 rounded">
                 ACADEMIC ACCREDITATION & CURRICULUM WING
               </span>
-              <span className="text-[11px] text-slate-400 font-mono">
-                NCVET & MSBTE Affiliation Portal
+              <span className="text-[10px] font-mono text-amber-300 bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded flex items-center gap-1">
+                <ShieldAlert className="w-3 h-3 text-amber-400" />
+                SYNTHETIC PILOT BENCHMARK DATASET
               </span>
             </div>
             <h1 className="text-xl font-bold text-white tracking-tight">
               Polytechnic & ITI Curriculum Relevancy Terminal
             </h1>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Analyze institutional teaching modules against live 2026 industrial requirements. Scan syllabi with Gemini 3.1 Pro vision to identify syllabus decay, eliminate obsolete modules, and integrate state-mandated technical micro-credentials.
+              Verify syllabus alignment against active industrial requisitions. Gemini 3.1 Pro vision audits syllabi to isolate module gaps and verify NSQF compliance.
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          <div className="flex items-center gap-2 shrink-0 flex-wrap">
+            {onOpenMethodology && (
+              <button
+                onClick={onOpenMethodology}
+                className="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all"
+                title="View how alignment percentages are calculated"
+              >
+                <Calculator className="w-3.5 h-3.5 text-blue-400" />
+                <span>Scoring Formula</span>
+              </button>
+            )}
             <button
               onClick={onOpenSyllabusUpload}
-              className="bg-teal-700 hover:bg-teal-600 text-white font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-2 transition-all shadow-sm"
+              className="bg-teal-700 hover:bg-teal-600 text-white font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-sm"
             >
               <FileText className="w-3.5 h-3.5" />
               Scan Syllabus Document (Vision 3.1)
             </button>
             <button
               onClick={onOpenAddProgram}
-              className="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-2 transition-all"
+              className="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-medium px-3.5 py-2 rounded-lg text-xs flex items-center gap-1.5 transition-all"
             >
               <Plus className="w-3.5 h-3.5" />
-              Register Vocational Course
+              Register Course
             </button>
           </div>
         </div>
@@ -99,7 +115,7 @@ export const InstituteDashboard: React.FC<InstituteDashboardProps> = ({
             <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
               Enrolled Programs ({displayedPrograms.length})
             </h3>
-            <span className="text-[11px] text-slate-500 font-mono">Click to audit</span>
+            <span className="text-[10px] text-slate-500 font-mono">Synthetic Sample Cohort</span>
           </div>
 
           {/* Quick Search in Directory */}
@@ -157,7 +173,7 @@ export const InstituteDashboard: React.FC<InstituteDashboardProps> = ({
                       <span className="text-emerald-400 font-medium">{prog.avgPlacementSalaryINR}</span>
                     </div>
                     <div>
-                      <span className="text-slate-500 block text-[10px]">CAPACITY</span>
+                      <span className="text-slate-500 block text-[10px]">SAMPLE COHORT</span>
                       <span className="text-slate-300">{prog.enrolledStudents} Trainees</span>
                     </div>
                   </div>
@@ -169,15 +185,20 @@ export const InstituteDashboard: React.FC<InstituteDashboardProps> = ({
 
         {/* Right Column: Detailed Curriculum Relevancy Matrix (7 cols) */}
         {activeProgram && (
-          <div className="lg:col-span-7 bg-[#0C1222] border border-slate-800 rounded-xl p-5 space-y-5">
-            <div className="flex items-start justify-between flex-wrap gap-4 border-b border-slate-800 pb-4">
+          <div className="lg:col-span-7 bg-[#0C1222] border border-slate-800 rounded-xl p-5 space-y-4">
+            <div className="flex items-start justify-between flex-wrap gap-4 border-b border-slate-800 pb-3">
               <div>
-                <span className="text-[10px] font-mono font-semibold text-blue-400 uppercase tracking-wider">
-                  STATUTORY RELEVANCY AUDIT
-                </span>
-                <h2 className="text-base font-bold text-white mt-1">{activeProgram.name}</h2>
-                <p className="text-xs text-slate-400 font-mono mt-0.5">
-                  {activeProgram.instituteName} • Sector: {activeProgram.sector} • Duration: {activeProgram.durationWeeks} Weeks
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono font-semibold text-blue-400 uppercase tracking-wider">
+                    STATUTORY RELEVANCY AUDIT
+                  </span>
+                  <span className="text-[9px] font-mono text-slate-500 bg-slate-900 border border-slate-800 px-1 rounded">
+                    Simulated Curriculum Spec
+                  </span>
+                </div>
+                <h2 className="text-base font-bold text-white mt-0.5">{activeProgram.name}</h2>
+                <p className="text-xs text-slate-400 font-mono">
+                  {activeProgram.instituteName} • Sector: {activeProgram.sector} • Duration: {activeProgram.durationWeeks} Wks
                 </p>
               </div>
 
@@ -186,87 +207,95 @@ export const InstituteDashboard: React.FC<InstituteDashboardProps> = ({
                 className="bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition-all"
               >
                 <FileText className="w-3.5 h-3.5 text-teal-400" />
-                Re-Scan Document
+                Scan Document
               </button>
             </div>
 
             {/* Score & Formal Accreditation Card */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-4 flex items-center justify-between gap-4 flex-wrap">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-lg bg-slate-800 border border-slate-700 flex flex-col items-center justify-center font-mono">
-                  <span className="text-lg font-bold text-white">{activeProgram.alignmentScore}%</span>
-                  <span className="text-[8px] text-slate-400 uppercase">Index</span>
+            <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-3.5 flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-slate-800 border border-slate-700 flex flex-col items-center justify-center font-mono shrink-0">
+                  <span className="text-base font-bold text-white">{activeProgram.alignmentScore}%</span>
+                  <span className="text-[8px] text-slate-400 uppercase">Score</span>
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-white">Accreditation Standing:</span>
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
-                        activeProgram.status === 'Active'
-                          ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
-                          : activeProgram.status === 'Under Review'
-                          ? 'bg-amber-950/60 text-amber-300 border-amber-800/60'
-                          : 'bg-rose-950/60 text-rose-300 border-rose-800/60'
-                      }`}
-                    >
-                      {activeProgram.status.toUpperCase()}
-                    </span>
+                    <span className="text-xs font-bold text-white">Competency Alignment Index</span>
+                    {onOpenMethodology && (
+                      <button
+                        onClick={onOpenMethodology}
+                        className="text-[10px] text-blue-400 hover:underline font-mono"
+                      >
+                        (See Method)
+                      </button>
+                    )}
                   </div>
-                  <p className="text-xs text-slate-400 mt-1 max-w-lg leading-relaxed">
-                    {activeProgram.syllabusSummary}
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    Calculated from 45% semantic match with live 2026 industrial vacancies + 35% NSQF hours + 20% hiring demand.
                   </p>
                 </div>
               </div>
+
+              <span
+                className={`text-xs font-mono font-bold px-2.5 py-1 rounded border shrink-0 ${
+                  activeProgram.alignmentScore >= 80
+                    ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/80'
+                    : 'bg-rose-950/80 text-rose-300 border-rose-800/80'
+                }`}
+              >
+                {activeProgram.status.toUpperCase()}
+              </span>
             </div>
 
-            {/* Teaching Modules Taxonomy */}
-            <div>
-              <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2.5 flex items-center gap-2">
-                <BookOpen className="w-3.5 h-3.5 text-blue-400" />
-                Curriculum Competencies & Teaching Hours Breakdown
-              </h4>
-              <div className="space-y-2">
-                {activeProgram.skills.map((sk, idx) => (
+            {/* Syllabus Summary */}
+            <div className="space-y-1 bg-slate-900/40 border border-slate-800/80 rounded-lg p-3">
+              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">
+                Audited Curriculum Overview:
+              </span>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {activeProgram.syllabusSummary}
+              </p>
+            </div>
+
+            {/* Audited Modules Breakdown */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="font-semibold text-slate-300 uppercase tracking-wider">
+                  Mandated Modules & Industry Relevancy:
+                </span>
+                <span className="text-slate-500 font-mono text-[10px]">
+                  Evaluated Against Live Openings
+                </span>
+              </div>
+
+              <div className="space-y-1.5">
+                {activeProgram.skills.map((sk) => (
                   <div
-                    key={idx}
-                    className="bg-slate-900/80 border border-slate-800 rounded-lg p-3 flex items-center justify-between text-xs"
+                    key={sk.skillId}
+                    className="bg-slate-900/70 border border-slate-800 rounded-lg p-2.5 flex items-center justify-between text-xs"
                   >
                     <div>
-                      <div className="font-semibold text-white">{sk.skillName}</div>
-                      <div className="text-[11px] text-slate-400 font-mono mt-0.5">
-                        Proficiency: <span className="text-slate-200">{sk.proficiencyLevel}</span> • Allocated: <span className="text-slate-200">{sk.hours} Contact Hours</span>
-                      </div>
+                      <span className="font-semibold text-white block">{sk.skillName}</span>
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        {sk.hours} Practical Lab Hours • Level: {sk.proficiencyLevel}
+                      </span>
                     </div>
+
                     <div className="text-right">
-                      <span className="text-xs font-mono font-bold text-blue-400">{sk.relevanceScore}%</span>
-                      <span className="text-[9px] text-slate-500 block font-mono">Market Index</span>
+                      <span
+                        className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                          sk.relevanceScore >= 80
+                            ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60'
+                            : sk.relevanceScore >= 50
+                            ? 'bg-amber-950/60 text-amber-300 border-amber-800/60'
+                            : 'bg-rose-950/60 text-rose-300 border-rose-800/60'
+                        }`}
+                      >
+                        {sk.relevanceScore}% Relevancy
+                      </span>
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Actionable Modernization Directives */}
-            <div className="bg-slate-900/90 border border-slate-800 rounded-lg p-4 space-y-2.5">
-              <span className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                Directives for 2026 Academic Year Refresh
-              </span>
-              <div className="space-y-2 text-xs">
-                <div className="flex items-start gap-2 bg-[#0C1222] p-2.5 rounded border border-slate-800">
-                  <span className="text-blue-400 font-mono font-bold">01.</span>
-                  <div>
-                    <span className="font-semibold text-white">Integrate 40 Hours of High Voltage Safety & Telemetry Diagnostics:</span>
-                    <p className="text-slate-400 mt-0.5">Automotive employers in Pune-Chakan require ISO 26262 compliance certifications prior to shop-floor deployment.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2 bg-[#0C1222] p-2.5 rounded border border-slate-800">
-                  <span className="text-blue-400 font-mono font-bold">02.</span>
-                  <div>
-                    <span className="font-semibold text-white">Prune Legacy Manual Lathe/Milling Operations by 35%:</span>
-                    <p className="text-slate-400 mt-0.5">Replace with 5-axis CNC programming, CAD/CAM toolpathing, and digital metrology simulation.</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

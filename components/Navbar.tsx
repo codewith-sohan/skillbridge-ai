@@ -17,6 +17,8 @@ import {
   Activity,
   FileText,
   SlidersHorizontal,
+  Calculator,
+  ShieldAlert,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -29,6 +31,7 @@ interface NavbarProps {
   onSignOut: () => void;
   onOpenHighThinking: () => void;
   onOpenSyllabusUpload: () => void;
+  onOpenMethodology?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -41,6 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSignOut,
   onOpenHighThinking,
   onOpenSyllabusUpload,
+  onOpenMethodology,
 }) => {
   return (
     <header className="sticky top-0 z-50 bg-[#0A0E17] border-b border-slate-800 text-slate-100 shadow-md">
@@ -56,11 +60,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <span className="text-slate-600">|</span>
             <span className="text-slate-400 hidden md:inline">
-              Skill, Employment, Entrepreneurship & Innovation Department (DVET)
+              Skill & Employment Dept (DVET)
             </span>
             <span className="text-slate-600 hidden md:inline">|</span>
             <span className="text-amber-400 font-mono font-medium">
               SIH 2026 • Challenge 134 & 135
+            </span>
+            <span className="text-slate-600 hidden lg:inline">|</span>
+            <span className="text-amber-300 font-mono text-[10px] bg-amber-950/60 border border-amber-800/60 px-1.5 py-0.5 rounded hidden lg:inline-flex items-center gap-1">
+              <ShieldAlert className="w-3 h-3 text-amber-400" />
+              SYNTHETIC PILOT BENCHMARK
             </span>
           </div>
 
@@ -160,6 +169,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Skills Taxonomy
             </button>
+            {onOpenMethodology && (
+              <button
+                onClick={onOpenMethodology}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-850 transition-all flex items-center gap-1.5"
+                title="View Alignment & Utilization Mathematical Scoring Formulation"
+              >
+                <Calculator className="w-3.5 h-3.5 text-blue-400" />
+                <span>Methodology & Formula</span>
+              </button>
+            )}
           </nav>
 
           {/* Institutional Role Switcher & Auth */}
